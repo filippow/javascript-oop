@@ -8,5 +8,11 @@ body {
 }
 
 .list-group-item-action {
+    list-style: none;
     cursor: pointer;
+}
+.styleProgress{
+    background: lightgreen;
+    height:10px;
+    margin: 0;
 }

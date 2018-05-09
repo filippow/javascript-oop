@@ -1,10 +1,13 @@
 export default class Quiz {
     /**
      * @param {string} title 
-     * @param {Question[]} quiestions 
+     * @param {Question[]} questions 
      */
-    constructor(title, quiestions) {
-
+    constructor(title, questions) {
+        this.title = title;
+        this.questions = questions;
+        this._questionsLength = questions.length;
+        this._currentIndexQuestion = 0;
     }
 
     /**
@@ -13,7 +16,7 @@ export default class Quiz {
      * @returns {Question}
      */
     get currentQuestion() {
-        
+        return this.questions[this._currentIndexQuestion];
     }
 
     /**
@@ -22,7 +25,7 @@ export default class Quiz {
      * @returns {boolean}
      */
     get hasEnded() {
-        
+        return this._currentIndexQuestion >= this._questionsLength;
     }
 
     /**
@@ -30,6 +33,6 @@ export default class Quiz {
      * @param {*} answer 
      */
     checkAnswer(answer) {
-        
+       return this.currentQuestion.isCorrectAnswer(answer)
     }
 }

@@ -5,7 +5,9 @@ export default class Question {
      * @param {number} correctAnswer Индекс правильного ответа
      */
     constructor(text, answers, correctAnswer) {
-
+        this.text = text;
+        this.answers = answers;
+        this.correctAnswer = correctAnswer;
     }
 
     /**
@@ -15,6 +17,6 @@ export default class Question {
      * @returns {boolean}
      */
     isCorrectAnswer(answer) {
-        
+        return this.correctAnswer === this.answers.indexOf(answer)
     }
 }
