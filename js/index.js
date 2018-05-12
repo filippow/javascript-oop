@@ -2,6 +2,8 @@ import App from './app.js';
 import Quiz from './quiz.js';
 import Question from './question.js';
 
+//task5
+
 const questions = [
     {
         type: 'multiple',
