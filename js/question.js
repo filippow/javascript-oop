@@ -1,22 +1,27 @@
 export default class Question {
-    /**
-     * @param {string} text Текст вопроса
-     * @param {string[]} answers Варианты ответов
-     * @param {number} correctAnswer Индекс правильного ответа
-     */
-    constructor(text, answers, correctAnswer) {
+ 
+    constructor(text, answers, correctAnswer, type) {
         this.text = text;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
+        this.type = type;
     }
 
-    /**
-     * Проверяет правильность ответа.
-     * 
-     * @param {number} answer
-     * @returns {boolean}
-     */
-    isCorrectAnswer(answer) {
-        return this.correctAnswer === this.answers.indexOf(answer)
+    isCorrectAnswer(answer) { 
+        switch(this.type) {
+            case 'single':
+                return this.correctAnswer === this.answers.indexOf(answer);
+                break;
+            case 'open':
+                return this.correctAnswer.toLowerCase() === answer.toLowerCase();
+                break;
+            case 'multiple':
+                return this.correctAnswer.length == answer.length && this.correctAnswer.every((item,index)=> item == answer[index]);
+                break;
+        }
+    }
+
+    get typeOfQuestion() {
+       return this.type;
     }
 }

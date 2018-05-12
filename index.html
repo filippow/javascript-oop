@@ -11,14 +11,22 @@
         <div id="app">
             <div id="quiz" class="card">
                 <header class="card-header">
-                    <h1 id="title" class="card-title"></h1>
+                    <h3 id="title" class="card-title"></h3>
                     <h3 id="score" class="card-subtitle"></h3>
                 </header>
 
                 <section id="question" class="card-body"></section>
                 
+                    <input type="text" id="openAnswer" class="hidden form-control "></input>
+
+                    <div id="multipleType" ></div>
+
+                    <button  disabled id='submit' class="btn btn-success">Подтвердить</button>
+                    <button id='repeat' class="btn btn-primary hidden">Повторить тест!</button>
+            
                 <ul id="answers" class="list-group list-group-flush">
                 </ul>
+                
 
                 <footer id="progress" class="card-footer"></footer>
                 <div class = 'styleProgress'></div>
