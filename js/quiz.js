@@ -5,12 +5,20 @@ export default class Quiz {
         this.questions = questions;
         this._questionsLength = questions.length;
         this._currentIndexQuestion = 0;
-
+        this._amountCorrectAnswers = 0;
         this.init();
     }
 
     init() {
         this._currentType = this.questions[this._currentIndexQuestion].typeOfQuestion;
+    }
+    
+    get amountCorrectAnswers() {
+        return this._amountCorrectAnswers;
+    }
+
+    set amountCorrectAnswers(value) {
+        this._amountCorrectAnswers = value;
     }
 
     get currentIndexQuestion() {

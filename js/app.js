@@ -3,7 +3,6 @@ export default class App {
     constructor(element, quiz) {
         this.element = element;
         this.quiz = quiz;
-        this._amountCorrectAnswers = 0;
         
         this.init(element);
     }
@@ -48,7 +47,7 @@ export default class App {
                 });
         }
 
-        this.quiz.checkAnswer(answer) ? this._amountCorrectAnswers +=1 : ''
+        this.quiz.checkAnswer(answer) ? this.quiz.amountCorrectAnswers +=1 : ''
 
         this.quiz.currentIndexQuestion = this.quiz.currentIndexQuestion +1;
         this.displayNext();
@@ -132,7 +131,7 @@ export default class App {
     }
 
     displayScore() {
-        this._score.textContent = `Правильных ответов: ${this._amountCorrectAnswers} из ${this.quiz._questionsLength }` ;
+        this._score.textContent = `Правильных ответов: ${this.quiz.amountCorrectAnswers} из ${this.quiz._questionsLength }` ;
     }
 
     hideElements({singleAnswer, multipleAnswer, openAnswer, button}) {
@@ -150,12 +149,11 @@ export default class App {
     }
     
     changeInputAnswer(event) {
-        console.dir(event.target.value);
         event.target.value.length ? this.button.removeAttribute('disabled') : this.button.setAttribute('disabled', true); 
     }
 
     repeatTest() {
-        this._amountCorrectAnswers = 0;
+        this.quiz.amountCorrectAnswers = 0;
         this.quiz.currentIndexQuestion = 0;
         this.buttonRepeat.classList.add('hidden');
         this.displayNext();
