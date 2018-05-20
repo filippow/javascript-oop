@@ -2,29 +2,30 @@ export default class ColorPicker {
   constructor({element, addNewColor = () => {} }) {
     this._element = element;
     this.addNewColor = addNewColor;
-    this._newColor = {
-      red: 0,
-      green: 0,
-      blue: 0
-    };
+    this._newColor = {red: 0, green: 0, blue: 0 };
 
     this.init(element);
   }
 
   init(element) {
-    this._preview = element.querySelector('.color-picker__preview');
-    this.colorSliders = element.querySelector('.color-picker__sliders');
-    
-    this.colorSliders.addEventListener('change', this.onChangeSlidersValue.bind(this));
+    this.preview = element.querySelector('.color-picker__preview');
 
-    this.addButton = element.querySelector('.color-picker__add-button');
-    this.addButton.addEventListener('click', this.onAddNewColor.bind(this));
+    element.querySelector('.color-picker__sliders')
+      .addEventListener('change', this.onChangeSlidersValue.bind(this));
 
-    this.closeButton = element.querySelector('.color-picker__close-button');
-    this.closeButton.addEventListener('click', this.showAndHideTools.bind(this));
+    element.querySelector('.color-picker__add-button')
+      .addEventListener('click', this.onAddNewColor.bind(this));
+
+    element.querySelector('.color-picker__close-button')
+      .addEventListener('click', this.showAndHideTools.bind(this));
 
     this.drawPreview();
   }
+
+  //  Пытался переписать этот метод так же как в ветке solution, но в этом случае появляется БАГА!
+  //  При добавлении нескольких новых цветов, на экране они отображатся правильно, но по сути 
+  //  все добавленные имеют одно и тоже value. Как бы новый цвет перезаписывает все остальные добавленные.
+  //  Хз почему так. Поэтому оставил как было.
 
   onChangeSlidersValue(event) {
     let {red, green, blue} = this.newColor;
@@ -56,7 +57,7 @@ export default class ColorPicker {
   }
 
   drawPreview() {
-    this._preview.style.background = `rgb(${this.newColor.red},${this.newColor.green},${this.newColor.blue})`
+    this.preview.style.background = `rgb(${this.newColor.red},${this.newColor.green},${this.newColor.blue})`
   }
 
   get newColor() {
@@ -68,6 +69,6 @@ export default class ColorPicker {
       red: red,
       green: green,
       blue: blue
-    };
+    }
   }
 }

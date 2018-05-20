@@ -56,7 +56,6 @@ export default class colorPalette {
     activeElement.classList.add('selected');
   }
 
-  // Это паттерн фабрика? 
   createElement(color) {
     let li = document.createElement('li');
 

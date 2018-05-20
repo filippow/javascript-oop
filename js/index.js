@@ -4,7 +4,6 @@ import ColorPicker from './color-picker.js';
 
 new App({
     canvas: document.querySelector('#canvas'),
-    control: document.querySelector('.controls'),
 
     colorPalette: new ColorPalette({
         element: document.querySelector('#color-palette'),
