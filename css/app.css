@@ -11,7 +11,14 @@ table {
     border-spacing: 0px;
     margin: auto;
 }
-
+#game {
+    display:flex;
+    justify-content:flex-start
+}
+.container {
+    margin-top:50px;
+    width:400px;
+}
 td {
     border: 1px solid lightgray;
     border-right: none;
