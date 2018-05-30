@@ -23,6 +23,4 @@ export default class Cell {
       this._alive = val;
       this.element.classList.toggle('alive', val);
   }
-
-  
 }

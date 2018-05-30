@@ -11,6 +11,22 @@ table {
     border-spacing: 0px;
     margin: auto;
 }
+tbody {
+    display:flex;
+    width:800px;
+    height:800px;
+    flex-direction:column;
+}
+.display {
+    color: white;
+    font-size: 22px;
+    margin-bottom:30px;
+}
+.row {
+    display:flex;
+    width:100%;
+    height:100%;
+}
 #game {
     display:flex;
     justify-content:flex-start
@@ -23,8 +39,8 @@ td {
     border: 1px solid lightgray;
     border-right: none;
     border-bottom: none;
-    width: 20px;
-    height: 20px;
+    width:100%;
+    height:100%;
     background-color: transparent;
     cursor: pointer;
     transition: background-color .1s;
