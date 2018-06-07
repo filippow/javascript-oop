@@ -1,161 +1,79 @@
 export default class App {
 
     constructor(element, quiz) {
-        this.element = element;
-        this.quiz = quiz;
         
+
+        this.quiz = quiz;
+
         this.init(element);
     }
 
-    init(element) {
-        this._title = element.querySelector('#title');
-        this._score = element.querySelector('#score');
-        this._openAnswer = element.querySelector('#openAnswer');
-        this._progress = element.querySelector('#progress');
-        this._styleProgress = element.querySelector('.styleProgress');
+    init(element) { 
+        this.title = element.querySelector('#title');
+        this.question = element.querySelector('#question');
+        this.answers = element.querySelector('#answers');
+        this.progress = element.querySelector('#progress');
+        this.handleAnswer = this.handleAnswer.bind(this);
 
-        this.openAnswer = element.querySelector('#openAnswer'); 
-        this.openAnswer.addEventListener('input', this.changeInputAnswer.bind(this));
-
-        this.multipleType = element.querySelector('#multipleType');
-
-        this._answers = element.querySelector('#answers');
-        this._answers.addEventListener('click', this.handleAnswerClick.bind(this));
-
-        this.button = element.querySelector('#submit');
-        this.button.addEventListener('click', this.handleAnswerClick.bind(this));
-
-        this.buttonRepeat = element.querySelector('#repeat');
-        this.buttonRepeat.addEventListener('click', this.repeatTest.bind(this));
+       
     }
-
-    handleAnswerClick(event) {
-        let answer = '';
-
-        switch (this.quiz.currentType) {
-            case 'single':
-                answer = event.target.innerHTML;
-                this._answers.innerText = '';
-                break;
-            case 'open':
-                answer = this.openAnswer.value;
-                break;
-            case 'multiple':
-                answer = [];
-                this.multipleType.querySelectorAll('.customCheckbox').forEach( item => {
-                    item.checked ? answer.push(item.value) : ''
-                });
-        }
-
-        this.quiz.checkAnswer(answer) ? this.quiz.amountCorrectAnswers +=1 : ''
-
-        this.quiz.currentIndexQuestion = this.quiz.currentIndexQuestion +1;
+    handleAnswer(answer) {
+        this.quiz.checkAnswer(answer);
+        this.clear();
         this.displayNext();
     }
 
-    displayNext() { 
-        if (!this.quiz.hasEnded) {
-            this.displayQuestion();
-            this.displayAnswers();
-            this.displayProgress();
-        } else {
-            this._title.textContent = '';
-            this._progress.textContent = '';
-            this.multipleType.textContent = '';
-            this._title.textContent = '';
+    displayNext() {
+        if (this.quiz.hasEnded) {
             this.displayScore();
-            this.hideElements({singleAnswer: true, multipleAnswer: true, openAnswer:true, button: true});
-            this.buttonRepeat.classList.remove('hidden');
-
+            this.displayButtonRepeat();
+        } else {
+            this.renderAnswers();
+            this.renderQuestion();   
+            this.displayNumberQuestion();
         }
-        this._styleProgress.style.width = (100/this.quiz._questionsLength)*this.quiz._currentIndexQuestion + '%';
+       
+        this.displayProgress();
     }
 
-    displayQuestion() {
-        this._title.textContent = this.quiz.currentQuestion.text;
+    renderQuestion() {
+       let title =  this.quiz.renderQuestion();
+       this.title.textContent = title;
     }
 
-    displayAnswers() {
-        switch(this.quiz.currentType) {
-            case 'single':
-                this.displaySingleType();
-                break;
-            case 'open':
-                this.displayOpenType();
-                break;
-            case 'multiple':
-                this.displayMultipleType();
-                break;
-        }
+    renderAnswers() {
+        let form = this.quiz.currentQuestion.renderAnswers(this.handleAnswer);
+        this.answers.appendChild(form);
     }
 
-    displaySingleType() {
-        this.hideElements({singleAnswer: false, multipleAnswer: true, openAnswer:true, button: true});
-
-        this.quiz.currentQuestion.answers.forEach( item => {
-            let domElementAnswers = document.createElement('li');
-            domElementAnswers.textContent = item;
-            domElementAnswers.classList.add('list-group-item-action');
-            this._answers.appendChild(domElementAnswers);
-       })
-    }
-
-    displayOpenType() {
-        this.hideElements({singleAnswer: true, multipleAnswer: true, openAnswer:false, button: false});
-        this.button.setAttribute('disabled', true);
-        this.openAnswer.value = '';  // при повторном воспроизведении теста оставалось предыдущее значение
-    }
-
-    displayMultipleType() {
-        this.hideElements({singleAnswer: true, multipleAnswer: false, openAnswer:true, button: false})
-
-        this.quiz.currentQuestion.answers.forEach( (item,index)=> {
-            let checkbox = document.createElement('input');
-            let label = document.createElement('label');
-         
-            checkbox.type = 'checkbox';
-            checkbox.value = index;
-            checkbox.addEventListener('change', this.changeCheckbox.bind(this));
-            checkbox.classList.add('customCheckbox');
-
-            label.textContent = item;
-            label.classList.add('reverse');     //Для правильного отображения группы элементов "Checkbox --> Label"
-            label.appendChild(checkbox);
-            
-            this.multipleType.appendChild(label);    
-        })
-    }
-    
-    displayProgress() {
-        this._progress.textContent = `Вопрос ${this.quiz._currentIndexQuestion +1} из ${this.quiz._questionsLength}`;
+    clear() {
+        this.title.textContent = '';
+        this.answers.textContent = '';
+        this.question.textContent = '';
     }
 
     displayScore() {
-        this._score.textContent = `Правильных ответов: ${this.quiz.amountCorrectAnswers} из ${this.quiz._questionsLength }` ;
+        this.title.textContent = `Ваш результат ${this.quiz.correctAnswers} из  ${this.quiz.questions.length}`;
     }
 
-    hideElements({singleAnswer, multipleAnswer, openAnswer, button}) {
-        this._answers.classList.toggle('hidden', singleAnswer);
-        this.multipleType.classList.toggle('hidden', multipleAnswer);
-        this._openAnswer.classList.toggle('hidden', openAnswer);
-        this.button.classList.toggle('hidden', button);
+    displayProgress() {
+        this.progress.style.width = (100/this.quiz.questions.length)*this.quiz.currentQuestionIndex + '%';
     }
-    
-    changeCheckbox() {
-        let checkboxs = Array.prototype.slice.call(this.multipleType.querySelectorAll('.customCheckbox'));
-        let disableButton = checkboxs.some( item => item.checked === true);
-    
-        disableButton ? this.button.removeAttribute('disabled') : this.button.setAttribute('disabled', true); 
+
+    displayNumberQuestion() {
+        this.question.textContent = `Вопрос ${this.quiz.currentQuestionIndex+1} из ${this.quiz.questions.length}`
     }
-    
-    changeInputAnswer(event) {
-        event.target.value.length ? this.button.removeAttribute('disabled') : this.button.setAttribute('disabled', true); 
+
+    displayButtonRepeat() {
+        let button = document.createElement('button');
+        button.textContent = 'Повторить тест';
+        button.addEventListener('click', this.repeatTest.bind(this));
+        this.answers.appendChild(button);
     }
 
     repeatTest() {
-        this.quiz.amountCorrectAnswers = 0;
-        this.quiz.currentIndexQuestion = 0;
-        this.buttonRepeat.classList.add('hidden');
+        this.quiz.currentQuestionIndex = 0;
+        this.answers.textContent = '';
         this.displayNext();
     }
 } 

@@ -1,10 +1,12 @@
 import App from './app.js';
 import Quiz from './quiz.js';
-import Question from './question.js';
+import {createQuestion} from './question.js';
+
 
 //task5
 
 const questions = [
+    
     {
         type: 'multiple',
         text: 'Какие способы создают объект?',
@@ -17,6 +19,11 @@ const questions = [
             'Object.create(null)'
         ],
         correctAnswer: [1, 3, 5]
+    },
+    {
+        type: 'open',
+        text: 'Как называется совокупность функции и лексичесокй среды в который функция была объявлена?',
+        correctAnswer: 'Замыкание'
     },
     {
         type: 'single',
@@ -53,18 +60,12 @@ const questions = [
             'undefined'
         ],
         correctAnswer: 0
-    },
-    {
-        type: 'open',
-        text: 'Как называется совокупность функции и лексичесокй среды в который функция была объявлена?',
-        correctAnswer: 'Замыкание'
     }
 ];
 
 const root = document.querySelector('#app');
 
-const quiz = new Quiz('JS Quiz', questions.map(q => new Question(q.text, q.answers || '', q.correctAnswer, q.type)));
-
+const quiz = new Quiz('JS Quiz', questions.map(q => createQuestion(q)));
 const app = new App(root, quiz);
 
 app.displayNext();
